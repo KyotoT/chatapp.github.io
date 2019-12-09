@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Chatアプリ</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+<div>
+    <div>名前<input type="text" id="username" ></div>
+    <div>
+        <textarea id="text" rows="5"></textarea>
+        <button id="send">送信</button>
+    </div>
+    <!-- リスト表示-->
+    <div id="output"></div>
+</div>
+
+
+<!-- 以下JavaScript領域 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<!-- -app削除 -->
+<script src="https://www.gstatic.com/firebasejs/7.5.2/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDqCRMqfzo3aix6qLsIIrwklPS3VS24GuI",
+    authDomain: "gsosaka.firebaseapp.com",
+    databaseURL: "https://gsosaka.firebaseio.com",
+    projectId: "gsosaka",
+    storageBucket: "gsosaka.appspot.com",
+    messagingSenderId: "892808511057",
+    appId: "1:892808511057:web:68b20a4303b96fb2d24270"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+    //ここからがチャットの処理領域
+    
+    // 送受信の設定準備
+    const newPostRef = firebase.database().ref();
+
+    // MSG送信処理
+    $("#send").on("click",function(){
+
+        //console.log("OK");
+
+        newPostRef.push({
+            username: $("#username").val(),
+            text: $("#text").val()
+
+        });
+        
+        $("text").val("");
+    });
+
+    // MSG受信処理 firebaseの場合、引数はdata
+    newPostRef.on("child_added", function(data){
+        
+        let v = data.val();
+        let k = data.key;
+
+        //<br>改行
+        let str = `<p>${v.username}</p><br><p>${v.text}</p>`
+
+        //ここでデータをhtmlに埋め込む
+        $("#output").prepend(str);
+
+        console.log(v.username);
+
+        $("#")
+
+    });
+
+
+
+</script>
+
+
+
+</body>
+</html>
